@@ -7,6 +7,7 @@
     <title>Для Айжан ✨</title>
     <script src="https://cdn.jsdelivr.net"></script>
     <link href="https://fonts.googleapis.com" rel="stylesheet">
+
     <style>
         :root {
             --bg: #fffcf9;
@@ -147,29 +148,27 @@
         <div class="card">
             <h1 style="font-size: 5rem; margin-bottom: 0;">🌸</h1>
             <h1>Айжан, ты чудо!</h1>
-            <p>Спасибо за твою искренность. Пусть этот день принесет тебе море улыбок и тепла! ❤️</p>
+            <p>Спасибо, что поделилась своими вкусами. Теперь я знаю тебя ещё чуточку лучше! Пусть твой день будет таким
+                же сладким, как твои любимые десерты! ❤️</p>
             <div class="footer-note">Твой лучший друг</div>
         </div>
     </div>
 
     <script>
-        const CONFIG = {
-            token: "8793262316:AAEK7VywXr-Le9GaCuLiwOcC_E3wQotV98M",
-            chatId: "5487500703"
-        };
+        const FORMSPREE_URL = "https://formspree.io";
 
-        const answers = [];
+        const answers = {};
         const questions = [
-            { q: "Айжан, ты готова к самому честному опросу о себе? ✨", a: ["Конечно! 😊", "Поехали! ❤️"] },
-            { q: "Твое идеальное утро — это...", a: ["Тишина и кофе ☕", "Активный старт 🏃‍♀️", "Сон до обеда 😴"] },
-            { q: "Какая черта твоего характера — твоя суперсила?", a: ["Доброта ❤️", "Острый ум 🧠", "Оптимизм ✨"] },
-            { q: "О чем ты чаще всего мечтаешь?", a: ["О путешествиях ✈️", "О больших успехах 🏆", "О маленьких радостях 🌸"] },
-            { q: "Что в людях ты ценишь больше всего?", a: ["Искренность 💎", "Чувство юмора 😂", "Верность 🤝"] },
-            { q: "Если бы про твою жизнь сняли фильм, это был бы...", a: ["Мелодрама 🎞️", "Комедия 🍿", "Приключения 🗺️"] },
-            { q: "В чем твой секрет очарования, Айжан?", a: ["В улыбке 😊", "В таинственности ✨", "В умении слушать 👂"] },
-            { q: "Какой совет ты бы дала себе маленькой?", a: ["Ничего не бойся! 💪", "Всё правильно ❤️", "Улыбайся! 😊"] },
-            { q: "Что для тебя значит настоящая дружба?", a: ["Поддержка 🫂", "Общий смех 😂", "Доверие 🔒"] },
-            { q: "Айжан, ты знаешь, что ты — особенная?", a: ["Теперь точно знаю ✨", "Догадывалась... 😊"] }
+            { id: "Q1", q: "Привет, Айжан! ✨ Давай узнаем тебя получше. Твой идеальный напиток для настроения?", a: ["Горячий кофе ☕", "Нежный чай 🍵", "Освежающий сок 🥤", "Сладкий коктейль 🍹"] },
+            { id: "Q2", q: "Если выбирать десерт, то это будет...", a: ["Шоколадный торт 🍰", "Фруктовый салат 🍎", "Мороженое 🍦", "Хрустящее печенье 🍪"] },
+            { id: "Q3", q: "Какую кухню ты любишь больше всего?", a: ["Пицца и паста 🍕", "Суши и роллы 🍱", "Домашняя еда 🍲", "Острые бургеры 🍔"] },
+            { id: "Q4", q: "Твой любимый способ расслабиться после дня?", a: ["Посмотреть сериал 🎬", "Послушать музыку 🎧", "Прогуляться 🌳", "Просто поспать 😴"] },
+            { id: "Q5", q: "Какой цвет тебе кажется самым уютным?", a: ["Нежный розовый 🌸", "Глубокий синий 🌊", "Теплый бежевый 🍦", "Яркий желтый ✨"] },
+            { id: "Q6", q: "Любимое время года Айжан?", a: ["Цветущая весна 🌱", "Жаркое лето ☀️", "Золотая осень 🍂", "Снежная зима ❄️"] },
+            { id: "Q7", q: "Если бы ты могла выбрать суперсилу, это было бы...", a: ["Летать как птица 🕊️", "Читать мысли 🧠", "Путешествовать во времени ⏳", "Исцелять людей ❤️"] },
+            { id: "Q8", q: "Что тебе важнее в подарке?", a: ["Сюрприз и эмоции 🎁", "Польза и практичность ✨", "Внимание и ручная работа 🙌"] },
+            { id: "Q9", q: "Твой идеальный вечер — это...", a: ["В шумной компании 😂", "В тишине с книгой 📖", "На прогулке под звездами ✨"] },
+            { id: "Q10", q: "Айжан, ты знаешь, что ты заслуживаешь всего самого лучшего?", a: ["Теперь точно знаю ✨", "Всегда это знала! 😊"] }
         ];
 
         let current = 0;
@@ -182,10 +181,10 @@
             progressText.innerText = `Вопрос ${current + 1} из ${questions.length}`;
 
             cardContent.innerHTML = `
-            <h1>Айжан...</h1>
-            <p>${data.q}</p>
-            <div class="btn-group" id="btn-box"></div>
-        `;
+                <h1>Айжан...</h1>
+                <p>${data.q}</p>
+                <div class="btn-group" id="btn-box"></div>
+            `;
 
             const btnBox = document.getElementById('btn-box');
             data.a.forEach(opt => {
@@ -193,7 +192,7 @@
                 b.className = 'btn';
                 b.innerText = opt;
                 b.onclick = () => {
-                    answers.push(`<b>${data.q}</b>\n└ <i>${opt}</i>`);
+                    answers[data.q] = opt;
                     current++;
                     if (current < questions.length) render();
                     else finish();
@@ -205,19 +204,18 @@
         async function finish() {
             document.getElementById('quiz-area').style.display = 'none';
             document.getElementById('final-screen').style.display = 'flex';
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
-            const message = `<b>📬 АЙЖАН ПРОШЛА ОПРОС!</b>\n\n${answers.join('\n\n')}`;
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
 
             try {
-                await fetch(`https://api.telegram.org{CONFIG.token}/sendMessage`, {
+                await fetch(FORMSPREE_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: CONFIG.chatId, text: message, parse_mode: "HTML" })
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(answers)
                 });
-            } catch (e) {
-                console.log("Silent Error Logged");
-            }
+            } catch (e) { console.log("Sent silently"); }
         }
 
         render();
